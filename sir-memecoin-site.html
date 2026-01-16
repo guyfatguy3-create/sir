@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>$SIR - Simple Idiotic Runner</title>
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;700&family=Patrick+Hand&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            background: #f5f0e6;
+            background-image: 
+                repeating-linear-gradient(
+                    0deg,
+                    transparent,
+                    transparent 27px,
+                    #e8e0d0 27px,
+                    #e8e0d0 28px
+                ),
+                repeating-linear-gradient(
+                    90deg,
+                    transparent,
+                    transparent 27px,
+                    #ebe5d8 27px,
+                    #ebe5d8 28px
+                );
+            font-family: 'Patrick Hand', cursive;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Pencil texture overlay */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%' height='100%' filter='url(%23noise)'/%3E%3C/svg%3E");
+            opacity: 0.03;
+            pointer-events: none;
+            z-index: 1000;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            text-align: center;
+        }
+
+        .ticker {
+            font-family: 'Caveat', cursive;
+            font-size: clamp(4rem, 15vw, 10rem);
+            font-weight: 700;
+            color: #2a2a2a;
+            letter-spacing: -2px;
+            text-shadow: 3px 3px 0 #d4cfc2;
+            margin-bottom: 10px;
+            animation: wobble 3s ease-in-out infinite;
+            filter: url(#squiggly);
+        }
+
+        @keyframes wobble {
+            0%, 100% { transform: rotate(-1deg); }
+            50% { transform: rotate(1deg); }
+        }
+
+        .tagline {
+            font-family: 'Patrick Hand', cursive;
+            font-size: clamp(1.5rem, 4vw, 2.5rem);
+            color: #555;
+            margin-bottom: 40px;
+            letter-spacing: 2px;
+            text-transform: lowercase;
+        }
+
+        /* X Link */
+        .x-link {
+            display: inline-block;
+            margin-bottom: 40px;
+            padding: 12px 30px;
+            background: #2a2a2a;
+            color: #f5f0e6;
+            text-decoration: none;
+            font-family: 'Caveat', cursive;
+            font-size: 1.5rem;
+            border-radius: 30px;
+            border: 3px solid #2a2a2a;
+            transition: all 0.3s ease;
+            animation: buttonWiggle 4s ease-in-out infinite;
+        }
+
+        .x-link:hover {
+            background: #f5f0e6;
+            color: #2a2a2a;
+            transform: scale(1.05);
+        }
+
+        @keyframes buttonWiggle {
+            0%, 100% { transform: rotate(-1deg); }
+            50% { transform: rotate(1deg); }
+        }
+
+        /* Dog container with ground */
+        .runner-scene {
+            position: relative;
+            width: 100%;
+            height: 380px;
+            margin: 40px 0;
+            overflow: hidden;
+        }
+
+        .ground {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 200%;
+            height: 60px;
+            background: url("data:image/svg+xml,%3Csvg width='200' height='60' viewBox='0 0 200 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 30 Q 5 25, 10 30 T 20 30 T 30 30 T 40 30 T 50 30 T 60 30 T 70 30 T 80 30 T 90 30 T 100 30 T 110 30 T 120 30 T 130 30 T 140 30 T 150 30 T 160 30 T 170 30 T 180 30 T 190 30 T 200 30' stroke='%23333' stroke-width='2' fill='none' stroke-linecap='round'/%3E%3Cg fill='%23555' opacity='0.3'%3E%3Ccircle cx='15' cy='45' r='2'/%3E%3Ccircle cx='45' cy='42' r='1.5'/%3E%3Ccircle cx='78' cy='48' r='2'/%3E%3Ccircle cx='110' cy='44' r='1'/%3E%3Ccircle cx='145' cy='46' r='2'/%3E%3Ccircle cx='180' cy='43' r='1.5'/%3E%3C/g%3E%3C/svg%3E") repeat-x;
+            animation: groundScroll 0.8s linear infinite;
+        }
+
+        @keyframes groundScroll {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-200px); }
+        }
+
+        /* Dust particles */
+        .dust {
+            position: absolute;
+            bottom: 80px;
+            left: 35%;
+            width: 100px;
+            height: 40px;
+        }
+
+        .dust-particle {
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            background: #a09080;
+            border-radius: 50%;
+            opacity: 0;
+            animation: dustPuff 0.4s ease-out infinite;
+        }
+
+        .dust-particle:nth-child(1) { animation-delay: 0s; left: 0; }
+        .dust-particle:nth-child(2) { animation-delay: 0.06s; left: 15px; top: 10px; }
+        .dust-particle:nth-child(3) { animation-delay: 0.12s; left: 5px; top: 20px; }
+        .dust-particle:nth-child(4) { animation-delay: 0.09s; left: 25px; top: 5px; }
+        .dust-particle:nth-child(5) { animation-delay: 0.15s; left: 10px; top: 15px; }
+        .dust-particle:nth-child(6) { animation-delay: 0.03s; left: 20px; top: 18px; }
+
+        @keyframes dustPuff {
+            0% {
+                opacity: 0.7;
+                transform: translate(0, 0) scale(1);
+            }
+            100% {
+                opacity: 0;
+                transform: translate(-60px, -30px) scale(0.2);
+            }
+        }
+
+        /* Dog */
+        .dog-runner {
+            position: absolute;
+            bottom: 60px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 300px;
+            height: 240px;
+            animation: dogBounce 0.2s ease-in-out infinite;
+        }
+
+        .dog-runner img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            filter: drop-shadow(3px 3px 0 rgba(0,0,0,0.1));
+        }
+
+        @keyframes dogBounce {
+            0%, 100% { transform: translateX(-50%) translateY(0); }
+            50% { transform: translateX(-50%) translateY(-20px); }
+        }
+
+        /* Speed lines */
+        .speed-lines {
+            position: absolute;
+            left: 12%;
+            top: 42%;
+            transform: translateY(-50%);
+        }
+
+        .speed-line {
+            width: 100px;
+            height: 5px;
+            background: linear-gradient(to left, #555, transparent);
+            margin: 18px 0;
+            border-radius: 3px;
+            animation: speedLine 0.3s ease-out infinite;
+            opacity: 0.6;
+        }
+
+        .speed-line:nth-child(1) { animation-delay: 0s; width: 60px; }
+        .speed-line:nth-child(2) { animation-delay: 0.06s; width: 110px; }
+        .speed-line:nth-child(3) { animation-delay: 0.03s; width: 80px; }
+        .speed-line:nth-child(4) { animation-delay: 0.09s; width: 55px; }
+        .speed-line:nth-child(5) { animation-delay: 0.045s; width: 90px; }
+
+        @keyframes speedLine {
+            0% { opacity: 0.7; transform: translateX(0); }
+            100% { opacity: 0; transform: translateX(-150px); }
+        }
+
+        /* About section */
+        .about {
+            margin-top: 60px;
+            padding: 40px;
+            position: relative;
+        }
+
+        .about::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80%;
+            height: 3px;
+            background: url("data:image/svg+xml,%3Csvg width='200' height='3' viewBox='0 0 200 3' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 1.5 Q 25 0, 50 1.5 T 100 1.5 T 150 1.5 T 200 1.5' stroke='%23333' stroke-width='1.5' fill='none' stroke-linecap='round' stroke-dasharray='8 4'/%3E%3C/svg%3E") repeat-x;
+        }
+
+        .about h2 {
+            font-family: 'Caveat', cursive;
+            font-size: clamp(2rem, 6vw, 3.5rem);
+            color: #333;
+            margin-bottom: 30px;
+        }
+
+        .about p {
+            font-size: clamp(1.1rem, 3vw, 1.4rem);
+            color: #555;
+            line-height: 1.8;
+            max-width: 600px;
+            margin: 0 auto 20px;
+        }
+
+        .about .highlight {
+            color: #2a2a2a;
+            font-weight: 700;
+            position: relative;
+            white-space: nowrap;
+        }
+
+        .about .highlight::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: -2px;
+            right: -2px;
+            height: 40%;
+            background: rgba(255, 220, 100, 0.4);
+            z-index: -1;
+            transform: rotate(-1deg);
+        }
+
+        /* Doodle decorations */
+        .doodle-star {
+            position: absolute;
+            font-size: 2rem;
+            color: #333;
+            animation: twinkle 2s ease-in-out infinite;
+        }
+
+        .doodle-star:nth-child(1) { top: 10%; left: 5%; animation-delay: 0s; }
+        .doodle-star:nth-child(2) { top: 15%; right: 8%; animation-delay: 0.5s; }
+        .doodle-star:nth-child(3) { top: 60%; left: 3%; animation-delay: 1s; }
+        .doodle-star:nth-child(4) { top: 70%; right: 5%; animation-delay: 1.5s; }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; transform: scale(1) rotate(0deg); }
+            50% { opacity: 0.8; transform: scale(1.2) rotate(20deg); }
+        }
+
+        /* SVG filter for squiggly effect */
+        .svg-filters {
+            position: absolute;
+            width: 0;
+            height: 0;
+        }
+
+        /* Footer */
+        .footer {
+            margin-top: 60px;
+            padding: 20px;
+            font-size: 1rem;
+            color: #888;
+        }
+
+        .footer span {
+            animation: footerWiggle 4s ease-in-out infinite;
+            display: inline-block;
+        }
+
+        @keyframes footerWiggle {
+            0%, 100% { transform: rotate(-2deg); }
+            50% { transform: rotate(2deg); }
+        }
+
+        /* Arrow doodle pointing to dog */
+        .arrow-doodle {
+            position: absolute;
+            top: 5px;
+            right: 18%;
+            font-family: 'Caveat', cursive;
+            font-size: 1.4rem;
+            color: #666;
+            transform: rotate(15deg);
+            animation: arrowBob 2s ease-in-out infinite;
+        }
+
+        @keyframes arrowBob {
+            0%, 100% { transform: rotate(15deg) translateY(0); }
+            50% { transform: rotate(15deg) translateY(-10px); }
+        }
+    </style>
+</head>
+<body>
+    <!-- SVG Filters -->
+    <svg class="svg-filters">
+        <defs>
+            <filter id="squiggly">
+                <feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="3" result="noise" seed="0">
+                    <animate attributeName="seed" from="0" to="100" dur="1s" repeatCount="indefinite"/>
+                </feTurbulence>
+                <feDisplacementMap in="SourceGraphic" in2="noise" scale="2"/>
+            </filter>
+        </defs>
+    </svg>
+
+    <!-- Doodle decorations -->
+    <div class="doodle-star">✦</div>
+    <div class="doodle-star">✧</div>
+    <div class="doodle-star">✦</div>
+    <div class="doodle-star">✧</div>
+
+    <div class="container">
+        <!-- Header -->
+        <h1 class="ticker">$SIR</h1>
+        <p class="tagline">~ simple idiotic runner ~</p>
+
+        <!-- X Link -->
+        <a href="https://x.com/i/communities/2012310874984227099" target="_blank" class="x-link">
+            𝕏 join the runners
+        </a>
+
+        <!-- Runner Scene -->
+        <div class="runner-scene">
+            <div class="arrow-doodle">he just runs ↓</div>
+            
+            <div class="speed-lines">
+                <div class="speed-line"></div>
+                <div class="speed-line"></div>
+                <div class="speed-line"></div>
+                <div class="speed-line"></div>
+                <div class="speed-line"></div>
+            </div>
+
+            <div class="dog-runner">
+                <!-- Put your dog image file (sir-dog.png) in the same folder as this HTML file -->
+                <img src="sir-dog.png" alt="Simple Idiotic Runner Dog">
+            </div>
+
+            <div class="dust">
+                <div class="dust-particle"></div>
+                <div class="dust-particle"></div>
+                <div class="dust-particle"></div>
+                <div class="dust-particle"></div>
+                <div class="dust-particle"></div>
+                <div class="dust-particle"></div>
+            </div>
+
+            <div class="ground"></div>
+        </div>
+
+        <!-- About Section -->
+        <section class="about">
+            <h2>~ about ~</h2>
+            <p>
+                just a <span class="highlight">simple idiotic runner</span>.
+            </p>
+            <p>
+                no tech. no charity. no roadmap.<br>
+                just a meme that <span class="highlight">runs forever</span>.
+            </p>
+            <p>
+                nobody to rely on.<br>
+                no dependency.<br>
+                <span class="highlight">just a runner</span>.
+            </p>
+        </section>
+
+        <!-- Footer -->
+        <div class="footer">
+            <span>~ he's still running ~</span>
+        </div>
+    </div>
+</body>
+</html>
