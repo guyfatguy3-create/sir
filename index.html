@@ -113,7 +113,7 @@
         .runner-scene {
             position: relative;
             width: 100%;
-            height: 380px;
+            height: 350px;
             margin: 40px 0;
             overflow: hidden;
         }
@@ -125,7 +125,7 @@
             width: 200%;
             height: 60px;
             background: url("data:image/svg+xml,%3Csvg width='200' height='60' viewBox='0 0 200 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 30 Q 5 25, 10 30 T 20 30 T 30 30 T 40 30 T 50 30 T 60 30 T 70 30 T 80 30 T 90 30 T 100 30 T 110 30 T 120 30 T 130 30 T 140 30 T 150 30 T 160 30 T 170 30 T 180 30 T 190 30 T 200 30' stroke='%23333' stroke-width='2' fill='none' stroke-linecap='round'/%3E%3Cg fill='%23555' opacity='0.3'%3E%3Ccircle cx='15' cy='45' r='2'/%3E%3Ccircle cx='45' cy='42' r='1.5'/%3E%3Ccircle cx='78' cy='48' r='2'/%3E%3Ccircle cx='110' cy='44' r='1'/%3E%3Ccircle cx='145' cy='46' r='2'/%3E%3Ccircle cx='180' cy='43' r='1.5'/%3E%3C/g%3E%3C/svg%3E") repeat-x;
-            animation: groundScroll 0.8s linear infinite;
+            animation: groundScroll 0.4s linear infinite;
         }
 
         @keyframes groundScroll {
@@ -136,95 +136,95 @@
         /* Dust particles */
         .dust {
             position: absolute;
-            bottom: 80px;
-            left: 35%;
+            bottom: 50px;
+            left: 42%;
             width: 100px;
             height: 40px;
         }
 
         .dust-particle {
             position: absolute;
-            width: 12px;
-            height: 12px;
+            width: 10px;
+            height: 10px;
             background: #a09080;
             border-radius: 50%;
             opacity: 0;
-            animation: dustPuff 0.4s ease-out infinite;
+            animation: dustPuff 0.25s ease-out infinite;
         }
 
         .dust-particle:nth-child(1) { animation-delay: 0s; left: 0; }
-        .dust-particle:nth-child(2) { animation-delay: 0.06s; left: 15px; top: 10px; }
-        .dust-particle:nth-child(3) { animation-delay: 0.12s; left: 5px; top: 20px; }
-        .dust-particle:nth-child(4) { animation-delay: 0.09s; left: 25px; top: 5px; }
-        .dust-particle:nth-child(5) { animation-delay: 0.15s; left: 10px; top: 15px; }
-        .dust-particle:nth-child(6) { animation-delay: 0.03s; left: 20px; top: 18px; }
+        .dust-particle:nth-child(2) { animation-delay: 0.04s; left: 15px; top: 10px; }
+        .dust-particle:nth-child(3) { animation-delay: 0.08s; left: 5px; top: 20px; }
+        .dust-particle:nth-child(4) { animation-delay: 0.06s; left: 25px; top: 5px; }
+        .dust-particle:nth-child(5) { animation-delay: 0.1s; left: 10px; top: 15px; }
+        .dust-particle:nth-child(6) { animation-delay: 0.02s; left: 30px; top: 12px; }
+        .dust-particle:nth-child(7) { animation-delay: 0.07s; left: 20px; top: 22px; }
 
         @keyframes dustPuff {
             0% {
-                opacity: 0.7;
+                opacity: 0.8;
                 transform: translate(0, 0) scale(1);
             }
             100% {
                 opacity: 0;
-                transform: translate(-60px, -30px) scale(0.2);
+                transform: translate(-70px, -30px) scale(0.2);
             }
         }
 
         /* Dog */
         .dog-runner {
             position: absolute;
-            bottom: 60px;
+            bottom: 50px;
             left: 50%;
             transform: translateX(-50%);
-            width: 300px;
-            height: 240px;
-            animation: dogBounce 0.2s ease-in-out infinite;
+            width: 250px;
+            height: 200px;
+            animation: dogBounce 0.12s ease-in-out infinite;
         }
 
-        .dog-runner img {
+        .dog-sketch {
             width: 100%;
             height: 100%;
-            object-fit: contain;
-            filter: drop-shadow(3px 3px 0 rgba(0,0,0,0.1));
         }
 
         @keyframes dogBounce {
-            0%, 100% { transform: translateX(-50%) translateY(0); }
-            50% { transform: translateX(-50%) translateY(-20px); }
+            0%, 100% { transform: translateX(-50%) translateY(0) rotate(-2deg); }
+            50% { transform: translateX(-50%) translateY(-12px) rotate(2deg); }
         }
 
         /* Speed lines */
         .speed-lines {
             position: absolute;
-            left: 12%;
-            top: 42%;
+            left: 15%;
+            top: 50%;
             transform: translateY(-50%);
         }
 
         .speed-line {
-            width: 100px;
-            height: 5px;
+            width: 80px;
+            height: 4px;
             background: linear-gradient(to left, #555, transparent);
-            margin: 18px 0;
-            border-radius: 3px;
-            animation: speedLine 0.3s ease-out infinite;
+            margin: 10px 0;
+            border-radius: 2px;
+            animation: speedLine 0.15s ease-out infinite;
             opacity: 0.6;
         }
 
-        .speed-line:nth-child(1) { animation-delay: 0s; width: 60px; }
-        .speed-line:nth-child(2) { animation-delay: 0.06s; width: 110px; }
-        .speed-line:nth-child(3) { animation-delay: 0.03s; width: 80px; }
-        .speed-line:nth-child(4) { animation-delay: 0.09s; width: 55px; }
-        .speed-line:nth-child(5) { animation-delay: 0.045s; width: 90px; }
+        .speed-line:nth-child(1) { animation-delay: 0s; width: 50px; }
+        .speed-line:nth-child(2) { animation-delay: 0.03s; width: 90px; }
+        .speed-line:nth-child(3) { animation-delay: 0.015s; width: 65px; }
+        .speed-line:nth-child(4) { animation-delay: 0.045s; width: 45px; }
+        .speed-line:nth-child(5) { animation-delay: 0.06s; width: 75px; }
+        .speed-line:nth-child(6) { animation-delay: 0.025s; width: 55px; }
 
         @keyframes speedLine {
-            0% { opacity: 0.7; transform: translateX(0); }
+            0% { opacity: 0.8; transform: translateX(0); }
             100% { opacity: 0; transform: translateX(-150px); }
         }
 
         /* About section */
         .about {
-            margin-top: 60px;
+            margin-top: 80px;
             padding: 40px;
             position: relative;
         }
@@ -320,10 +320,10 @@
         /* Arrow doodle pointing to dog */
         .arrow-doodle {
             position: absolute;
-            top: 5px;
-            right: 18%;
+            top: 20px;
+            right: 25%;
             font-family: 'Caveat', cursive;
-            font-size: 1.4rem;
+            font-size: 1.2rem;
             color: #666;
             transform: rotate(15deg);
             animation: arrowBob 2s ease-in-out infinite;
@@ -374,14 +374,86 @@
                 <div class="speed-line"></div>
                 <div class="speed-line"></div>
                 <div class="speed-line"></div>
+                <div class="speed-line"></div>
             </div>
 
             <div class="dog-runner">
-                <!-- Put your dog image file (sir-dog.png) in the same folder as this HTML file -->
-                <img src="sir-dog.png" alt="Simple Idiotic Runner Dog">
+                <!-- Fast running doodle dog -->
+                <svg class="dog-sketch" viewBox="0 0 220 160" xmlns="http://www.w3.org/2000/svg">
+                    <style>
+                        .sketch { fill: none; stroke: #333; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
+                        .filled { fill: #333; }
+                        .tongue { fill: none; stroke: #e55; stroke-width: 2.5; stroke-linecap: round; }
+                    </style>
+                    
+                    <!-- Body - stretched for running -->
+                    <ellipse cx="100" cy="85" rx="55" ry="30" class="sketch"/>
+                    
+                    <!-- Head - tilted forward -->
+                    <circle cx="165" cy="65" r="30" class="sketch"/>
+                    
+                    <!-- Ears - flopping back -->
+                    <path d="M150 45 Q 140 25, 130 35" class="sketch" style="stroke-width: 3;">
+                        <animate attributeName="d" values="M150 45 Q 140 25, 130 35; M150 45 Q 135 20, 125 30; M150 45 Q 140 25, 130 35" dur="0.1s" repeatCount="indefinite"/>
+                    </path>
+                    <path d="M160 42 Q 155 22, 145 28" class="sketch" style="stroke-width: 3;">
+                        <animate attributeName="d" values="M160 42 Q 155 22, 145 28; M160 42 Q 150 18, 140 24; M160 42 Q 155 22, 145 28" dur="0.1s" repeatCount="indefinite"/>
+                    </path>
+                    
+                    <!-- Eye - determined look -->
+                    <circle cx="178" cy="58" r="5" class="filled"/>
+                    <circle cx="180" cy="56" r="1.5" fill="white"/>
+                    
+                    <!-- Eyebrow - intense -->
+                    <path d="M172 50 L 185 48" class="sketch" style="stroke-width: 2;"/>
+                    
+                    <!-- Nose -->
+                    <ellipse cx="195" cy="68" rx="6" ry="5" class="filled"/>
+                    
+                    <!-- Mouth open, tongue out and flapping -->
+                    <path d="M188 75 Q 195 78, 198 75" class="sketch"/>
+                    <path class="tongue" style="stroke-width: 3;">
+                        <animate attributeName="d" values="M190 78 Q 200 85, 205 95 Q 210 105, 200 108; M190 78 Q 198 88, 202 100 Q 205 112, 195 115; M190 78 Q 200 85, 205 95 Q 210 105, 200 108" dur="0.15s" repeatCount="indefinite"/>
+                    </path>
+                    
+                    <!-- Tail - wagging fast -->
+                    <path class="sketch" style="stroke-width: 4;">
+                        <animate attributeName="d" values="M45 75 Q 20 50, 15 30; M45 75 Q 15 55, 25 25; M45 75 Q 10 60, 20 35; M45 75 Q 20 50, 15 30" dur="0.12s" repeatCount="indefinite"/>
+                    </path>
+                    
+                    <!-- Front legs - galloping motion -->
+                    <path class="sketch" style="stroke-width: 4;">
+                        <animate attributeName="d" values="M130 110 Q 145 130, 160 150; M130 110 Q 120 135, 105 155; M130 110 Q 135 140, 140 155; M130 110 Q 145 130, 160 150" dur="0.12s" repeatCount="indefinite"/>
+                    </path>
+                    <path class="sketch" style="stroke-width: 4;">
+                        <animate attributeName="d" values="M140 108 Q 125 135, 110 155; M140 108 Q 150 130, 165 150; M140 108 Q 140 140, 145 155; M140 108 Q 125 135, 110 155" dur="0.12s" repeatCount="indefinite"/>
+                    </path>
+                    
+                    <!-- Back legs - powerful push -->
+                    <path class="sketch" style="stroke-width: 4;">
+                        <animate attributeName="d" values="M60 105 Q 40 130, 25 155; M60 105 Q 70 130, 85 150; M60 105 Q 55 135, 50 155; M60 105 Q 40 130, 25 155" dur="0.12s" repeatCount="indefinite"/>
+                    </path>
+                    <path class="sketch" style="stroke-width: 4;">
+                        <animate attributeName="d" values="M70 108 Q 85 130, 100 150; M70 108 Q 55 135, 40 155; M70 108 Q 70 140, 75 155; M70 108 Q 85 130, 100 150" dur="0.12s" repeatCount="indefinite"/>
+                    </path>
+                    
+                    <!-- Motion lines near body -->
+                    <g opacity="0.4">
+                        <line x1="40" y1="70" x2="20" y2="70" class="sketch">
+                            <animate attributeName="opacity" values="0.4;0;0.4" dur="0.1s" repeatCount="indefinite"/>
+                        </line>
+                        <line x1="38" y1="85" x2="15" y2="85" class="sketch">
+                            <animate attributeName="opacity" values="0;0.4;0" dur="0.1s" repeatCount="indefinite"/>
+                        </line>
+                        <line x1="42" y1="100" x2="22" y2="100" class="sketch">
+                            <animate attributeName="opacity" values="0.4;0;0.4" dur="0.1s" repeatCount="indefinite"/>
+                        </line>
+                    </g>
+                </svg>
             </div>
 
             <div class="dust">
+                <div class="dust-particle"></div>
                 <div class="dust-particle"></div>
                 <div class="dust-particle"></div>
                 <div class="dust-particle"></div>
@@ -415,5 +487,11 @@
             <span>~ he's still running ~</span>
         </div>
     </div>
+
+    <script>
+        document.querySelectorAll('.speed-line').forEach((line, i) => {
+            line.style.marginLeft = Math.random() * 20 + 'px';
+        });
+    </script>
 </body>
 </html>
